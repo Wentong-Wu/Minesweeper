@@ -85,6 +85,22 @@ public class Minesweeper {
         {
             gameBoard[row][col] = hiddenBoard[row][col];
         }
+        if(gameBoard[row][col] == "0")
+        {
+            if (row-1 != -1 && col-1 != -1)
+            {
+                if (hiddenBoard[row-1][col-1] == "0") //North West
+                {
+                    gameBoard[row - 1][col - 1] = hiddenBoard[row - 1][col - 1];
+                    tileReveal(row-1,col-1);
+                }
+                if (hiddenBoard[row][col-1] == "0") //North
+                {
+                    gameBoard[row][col - 1] = hiddenBoard[row][col - 1];
+                    tileReveal(row,col-1);
+                }
+            }
+        }
     }
     private void SetBoard(String[][]arr,String item)
     {
@@ -129,11 +145,10 @@ public class Minesweeper {
         System.out.println("Enter column coord: ");
         int col = input.nextInt();
         System.out.println();
-        tileReveal(col, row);
 
         PlantBomb(10,10,10,hiddenBoard);
         AdjacentTile(hiddenBoard,bomb);
-        //AdjacentTile(gameBoard,"0");
+        tileReveal(col, row);
         DisplayBoard(gameBoard);
         while (play) {
             System.out.println("Enter row coord: ");
