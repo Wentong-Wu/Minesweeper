@@ -1,7 +1,11 @@
 import java.util.Random;
 import java.util.Scanner;
 public class Minesweeper {
-    void DisplayBoard(String[][] arr){
+    String[][] gameBoard = new String[10][10];
+    String[][] hiddenBoard = new String[10][10];
+    boolean play = false;
+    String bomb="*";
+    private void DisplayBoard(String[][] arr){
         for(int i = 0; i < arr.length-1;i++)
         {
             for(int j=0;j< arr[i].length-1;j++)
@@ -12,79 +16,83 @@ public class Minesweeper {
             System.out.println("");
         }
     }
-    void AdjacentTile(String[][]arr)
+    private void AdjacentTile(String[][]arr, String n)
     {
         for(int i = 0;i < arr.length;i++)
         {
             for(int j = 0; j <arr[i].length;j++)
             {
-                if (arr[i][j] == "*")
+                if (arr[i][j] == n) //Look for bombs
                 {
-                    if (i-1 != -1 && j-1 != -1) {
-                        if (arr[i - 1][j - 1] != "*" && arr[i - 1][j - 1] != null) //North West
+                    if (i-1 != -1 && j-1 != -1) //Making sure that the array is not out of bound.
+                    {
+                        if (arr[i - 1][j - 1] != n && arr[i - 1][j - 1] != null) //North West
                         {
-                            int n = Integer.parseInt(arr[i - 1][j - 1]);
-                            n++;
-                            arr[i - 1][j - 1] = n + "";
+                            int num = Integer.parseInt(arr[i - 1][j - 1]);
+                            num++;
+                            arr[i - 1][j - 1] = num + "";
                         }
-                        if (arr[i][j - 1] != "*" && arr[i][j - 1] != null) //North
+                        if (arr[i][j - 1] != n && arr[i][j - 1] != null) //North
                         {
-                            int n = Integer.parseInt(arr[i][j - 1]);
-                            n++;
-                            arr[i][j - 1] = n + "";
+                            int num = Integer.parseInt(arr[i][j - 1]);
+                            num++;
+                            arr[i][j - 1] = num + "";
                         }
-                        if (arr[i+1][j - 1] != "*" && arr[i+1][j - 1] != null) //North East
+                        if (arr[i+1][j - 1] != n && arr[i+1][j - 1] != null) //North East
                         {
-                            int n = Integer.parseInt(arr[i+1][j - 1]);
-                            n++;
-                            arr[i+1][j - 1] = n + "";
+                            int num = Integer.parseInt(arr[i+1][j - 1]);
+                            num++;
+                            arr[i+1][j - 1] = num + "";
                         }
-                        if (arr[i - 1][j] != "*" && arr[i - 1][j] != null) //West
+                        if (arr[i - 1][j] != n && arr[i - 1][j] != null) //West
                         {
-                            int n = Integer.parseInt(arr[i - 1][j]);
-                            n++;
-                            arr[i - 1][j] = n + "";
+                            int num = Integer.parseInt(arr[i - 1][j]);
+                            num++;
+                            arr[i - 1][j] = num + "";
                         }
-                        if (arr[i - 1][j+1] != "*" && arr[i - 1][j+1] != null) //South West
+                        if (arr[i - 1][j+1] != n && arr[i - 1][j+1] != null) //South West
                         {
-                            int n = Integer.parseInt(arr[i - 1][j+1]);
-                            n++;
-                            arr[i - 1][j+1] = n + "";
+                            int num = Integer.parseInt(arr[i - 1][j+1]);
+                            num++;
+                            arr[i - 1][j+1] = num + "";
                         }
                     }
-                    if(arr[i+1][j+1] != "*" && arr[i+1][j+1] != null) //South East
+                    if(arr[i+1][j+1] != n && arr[i+1][j+1] != null) //South East
                     {
-                        int n = Integer.parseInt(arr[i+1][j+1]);
-                        n++;
-                        arr[i+1][j+1] = n+"";
+                        int num = Integer.parseInt(arr[i+1][j+1]);
+                        num++;
+                        arr[i+1][j+1] = num+"";
                     }
-                    if(arr[i+1][j] != "*" && arr[i+1][j] != null) // South
+                    if(arr[i+1][j] != n && arr[i+1][j] != null) // South
                     {
-                        int n = Integer.parseInt(arr[i+1][j]);
-                        n++;
-                        arr[i+1][j] = n+"";
+                        int num = Integer.parseInt(arr[i+1][j]);
+                        num++;
+                        arr[i+1][j] = num+"";
                     }
-                    if(arr[i][j+1] != "*" && arr[i][j+1] != null) // East
+                    if(arr[i][j+1] != n && arr[i][j+1] != null) // East
                     {
-                        int n = Integer.parseInt(arr[i][j+1]);
-                        n++;
-                        arr[i][j+1] = n+"";
+                        int num = Integer.parseInt(arr[i][j+1]);
+                        num++;
+                        arr[i][j+1] = num+"";
                     }
                 }
             }
         }
     }
-    private void tileReveal(int x, int y)
+    private void tileReveal(int row, int col)
     {
-
+        if (gameBoard[row][col] == "-")
+        {
+            gameBoard[row][col] = hiddenBoard[row][col];
+        }
     }
-    private void SetBoard(String[][]arr)
+    private void SetBoard(String[][]arr,String item)
     {
         for(int i = 0 ; i< arr.length;i++)
         {
             for(int j=0;j<arr[i].length;j++)
             {
-                arr[i][j] = "0";
+                arr[i][j] = item;
             }
         }
     }
@@ -103,14 +111,47 @@ public class Minesweeper {
             arr[row][col] = "*";
         }
     }
+    private void SettingBoard(int row, int col)
+    {
+        this.gameBoard = new String[row][col];
+        this.hiddenBoard = new String[row][col];
+    }
     public void Play()
     {
-        Scanner input = new Scanner(System.in);
-        String[][] gameBoard = new String[10][10];
-        SetBoard(gameBoard);
-        PlantBomb(10,10,10,gameBoard);
-        AdjacentTile(gameBoard);
-        System.out.println();
+        play = true;
+        SetBoard(gameBoard,"-");
+        SetBoard(hiddenBoard,"0");
         DisplayBoard(gameBoard);
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("Enter row coord: ");
+        int row = input.nextInt();
+        System.out.println("Enter column coord: ");
+        int col = input.nextInt();
+        System.out.println();
+        tileReveal(col, row);
+
+        PlantBomb(10,10,10,hiddenBoard);
+        AdjacentTile(hiddenBoard,bomb);
+        //AdjacentTile(gameBoard,"0");
+        DisplayBoard(gameBoard);
+        while (play) {
+            System.out.println("Enter row coord: ");
+            row = input.nextInt();
+            System.out.println("Enter column coord: ");
+            col = input.nextInt();
+            System.out.println();
+            tileReveal(col, row);
+            DisplayBoard(gameBoard);
+        }
+    }
+    public void BoardSetting()
+    {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter number of rows: ");
+        int row = input.nextInt();
+        System.out.print("Enter number of column: ");
+        int col = input.nextInt();
+        SettingBoard(row,col);
     }
 }
