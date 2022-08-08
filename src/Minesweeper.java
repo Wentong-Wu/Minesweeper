@@ -25,7 +25,7 @@ public class Minesweeper {
             {
                 if (arr[i][j] == n) //Look for bombs
                 {
-                    if ((i-1 != -1 && j-1 != -1) || (i+1 != arr.length+1 && j+1 != arr.length+1)) //Making sure that the array is not out of bound.
+                    if (i-1 != -1 && j-1 != -1 && i+1 != arr.length && j+1 != arr.length) //Making sure that the array is not out of bound.
                     {
                         if (arr[i - 1][j - 1] != n && arr[i - 1][j - 1] != null) //North West
                         {
@@ -160,7 +160,7 @@ public class Minesweeper {
         System.out.println();
 
         PlantBomb(10,10,10);
-        //AdjacentTile(hiddenBoard,bomb);
+        AdjacentTile(hiddenBoard,bomb);
         //tileReveal(col, row);
         DisplayBoard(hiddenBoard);
         while (play) {
