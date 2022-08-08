@@ -7,11 +7,11 @@ public class Minesweeper {
     String bomb="*";
     ArrayList boardList = new ArrayList<>();
     private void DisplayBoard(String[][] arr){
-        for(int i = 0; i < arr.length-1;i++)
+        for(int i = 0; i < arr.length;i++)
         {
-            for(int j=0;j< arr[i].length-1;j++)
+            for(int j=0;j< arr[i].length;j++)
             {
-                System.out.print("|"+arr[i][j]+"|");
+                System.out.print("|"+arr[j][i]+"|");
                 //System.out.print('ඞ'+" ");
             }
             System.out.println("");
@@ -25,7 +25,7 @@ public class Minesweeper {
             {
                 if (arr[i][j] == n) //Look for bombs
                 {
-                    if (i-1 != -1 && j-1 != -1) //Making sure that the array is not out of bound.
+                    if ((i-1 != -1 && j-1 != -1) || (i+1 != arr.length+1 && j+1 != arr.length+1)) //Making sure that the array is not out of bound.
                     {
                         if (arr[i - 1][j - 1] != n && arr[i - 1][j - 1] != null) //North West
                         {
@@ -132,27 +132,13 @@ public class Minesweeper {
         System.out.println(boardList);
         for(int i = 0; i < numBomb;i++) {
             //boardList.set(i,bomb);
-
             String boardCoord = (String) boardList.get(0);
             String[] coord = boardCoord.split(",");
             int row = Integer.parseInt(coord[0]);
             int col = Integer.parseInt(coord[1]);
             hiddenBoard[row][col] = bomb;
             boardList.remove(0);
-            /*
-            int row = r.nextInt(rowSize - 1);
-            int col = r.nextInt(colSize - 1);
-            //Can store all the possible value into a list, then shuffle it, and choose the first list out of the shuffle.
-            while (hiddenBoard[row][col] == "*") // <- I DONT LIKE THIS :(
-            {
-                row = r.nextInt(rowSize-1);
-                col = r.nextInt(colSize-1);
-            }
-            hiddenBoard[row][col] = "*";
-
-             */
         }
-
     }
     private void SettingBoard(int row, int col)
     {
