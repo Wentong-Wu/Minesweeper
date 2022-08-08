@@ -1,10 +1,11 @@
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
+
 public class Minesweeper {
     String[][] gameBoard = new String[10][10];
     String[][] hiddenBoard = new String[10][10];
     boolean play = false;
     String bomb="*";
+    ArrayList boardList = new ArrayList<>();
     private void DisplayBoard(String[][] arr){
         for(int i = 0; i < arr.length-1;i++)
         {
@@ -112,20 +113,46 @@ public class Minesweeper {
             }
         }
     }
-    private void PlantBomb(int rowSize, int colSize, int numBomb, String[][]arr)
+    private void GenerateBoard()
+    {
+
+        for(int i = 0;i<hiddenBoard.length;i++)
+        {
+            for(int j =0; j<hiddenBoard[i].length;j++)
+            {
+                boardList.add(i+","+j);
+            }
+        }
+    }
+    private void PlantBomb(int rowSize, int colSize, int numBomb)
     {
         Random r = new Random();
+        GenerateBoard();
+        Collections.shuffle(boardList);
+        System.out.println(boardList);
         for(int i = 0; i < numBomb;i++) {
+            //boardList.set(i,bomb);
+
+            String boardCoord = (String) boardList.get(0);
+            String[] coord = boardCoord.split(",");
+            int row = Integer.parseInt(coord[0]);
+            int col = Integer.parseInt(coord[1]);
+            hiddenBoard[row][col] = bomb;
+            boardList.remove(0);
+            /*
             int row = r.nextInt(rowSize - 1);
             int col = r.nextInt(colSize - 1);
             //Can store all the possible value into a list, then shuffle it, and choose the first list out of the shuffle.
-            while (arr[row][col] == "*") // <- I DONT LIKE THIS :(
+            while (hiddenBoard[row][col] == "*") // <- I DONT LIKE THIS :(
             {
                 row = r.nextInt(rowSize-1);
                 col = r.nextInt(colSize-1);
             }
-            arr[row][col] = "*";
+            hiddenBoard[row][col] = "*";
+
+             */
         }
+
     }
     private void SettingBoard(int row, int col)
     {
@@ -146,10 +173,10 @@ public class Minesweeper {
         int col = input.nextInt();
         System.out.println();
 
-        PlantBomb(10,10,10,hiddenBoard);
-        AdjacentTile(hiddenBoard,bomb);
-        tileReveal(col, row);
-        DisplayBoard(gameBoard);
+        PlantBomb(10,10,10);
+        //AdjacentTile(hiddenBoard,bomb);
+        //tileReveal(col, row);
+        DisplayBoard(hiddenBoard);
         while (play) {
             System.out.println("Enter row coord: ");
             row = input.nextInt();
